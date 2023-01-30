@@ -13,3 +13,15 @@ export async function getAllTicketsTypes(req: AuthenticatedRequest, res: Respons
     return res.sendStatus(httpStatus.NO_CONTENT);
   }
 }
+
+export async function getAllTickets(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+
+  try {
+    const ticketTypes = await ticketService.getTicketByUserId(userId);
+
+    return res.status(httpStatus.OK).send(ticketTypes);
+  } catch (error) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
+}
