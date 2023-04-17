@@ -1,4 +1,4 @@
-import { TicketStatus } from '@prisma/client';
+import { TicketStatus, Ticket } from '@prisma/client';
 import { prisma } from '@/config';
 
 async function findTicketTypes() {
@@ -12,6 +12,16 @@ async function findTickets(userId: number) {
     },
     include: {
       TicketType: true,
+    },
+  });
+}
+
+async function getTicketById(id: number) {
+  return await prisma.ticket.findFirst({
+    where: { id },
+    include: {
+      TicketType: true,
+      Enrollment: true,
     },
   });
 }
@@ -32,6 +42,7 @@ const ticketRepository = {
   findTicketTypes,
   findTickets,
   postTicket,
+  getTicketById,
 };
 
 export default ticketRepository;
