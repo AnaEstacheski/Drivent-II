@@ -12,6 +12,10 @@ async function getTicketTypes() {
 }
 
 async function getTicketsbyUser(userId: number) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  if (!enrollment) {
+    throw notFoundError();
+  }
   const ticket = await ticketRepository.findTickets(userId);
   if (!ticket) {
     throw notFoundError();
@@ -20,9 +24,25 @@ async function getTicketsbyUser(userId: number) {
   return ticket;
 }
 
+async function postTicket({ userId, ticketTypeId }: NewTicket) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  if (!enrollment) {
+    throw notFoundError();
+  }
+
+  const ticket = ticketRepository.postTicket({ enrollmentId: enrollment.id, ticketTypeId });
+  return ticket;
+}
+
+type NewTicket = {
+  userId: number;
+  ticketTypeId: number;
+};
+
 const ticketService = {
   getTicketTypes,
   getTicketsbyUser,
+  postTicket,
 };
 
 export default ticketService;
