@@ -1,14 +1,14 @@
 import Joi from 'joi';
 
 const cardSchema = Joi.object({
-  issuer: Joi.string(),
-  number: Joi.string().length(16),
-  name: Joi.string(),
-  expirationDate: Joi.string(),
-  cvv: Joi.string().length(3),
+  issuer: Joi.string().required(),
+  number: Joi.string().required(),
+  name: Joi.string().required(),
+  expirationDate: Joi.string().required(),
+  cvv: Joi.string().length(3).required(),
 });
 
 export const paymentSchema = Joi.object({
-  ticketId: Joi.number().integer().min(0),
-  cardData: cardSchema,
+  ticketId: Joi.number().integer().min(0).required(),
+  cardData: cardSchema.required(),
 });

@@ -34,9 +34,9 @@ async function postTicket({ enrollmentId, ticketTypeId }: NewTicket) {
   });
 }
 
-async function updateTicket(ticketId: number) {
+async function updateTicket(id: number) {
   return prisma.ticket.update({
-    where: { id: ticketId },
+    where: { id },
     data: {
       status: TicketStatus.PAID,
     },

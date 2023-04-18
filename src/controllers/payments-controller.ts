@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+import { Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import paymentService from '@/services/payments-service';
@@ -30,13 +30,10 @@ export async function postPayment(req: AuthenticatedRequest, res: Response) {
       return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     const payment = await paymentService.postPayment(ticketId, cardData, userId);
-    if (!payment) {
-      return res.sendStatus(httpStatus.NOT_FOUND);
-    }
     return res.status(httpStatus.OK).send(payment);
   } catch (error) {
-    if (error.name === 'UnauthorizedError') {
-      return res.sendStatus(httpStatus.UNAUTHORIZED);
+    if (error.name === 'CannotEnrollBeforeStartDateError') {
+      return res.sendStatus(httpStatus.NOT_FOUND);
     }
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
