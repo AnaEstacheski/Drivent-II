@@ -16,7 +16,7 @@ async function getTicketsbyUser(userId: number) {
   if (!enrollment) {
     throw notFoundError();
   }
-  const ticket = await ticketRepository.findTickets(userId);
+  const ticket = await ticketRepository.findTickets(enrollment.id);
   if (!ticket) {
     throw notFoundError();
   }
@@ -31,6 +31,9 @@ async function postTicket({ userId, ticketTypeId }: NewTicket) {
   }
 
   const ticket = ticketRepository.postTicket({ enrollmentId: enrollment.id, ticketTypeId });
+  if (!ticket) {
+    throw notFoundError();
+  }
   return ticket;
 }
 
